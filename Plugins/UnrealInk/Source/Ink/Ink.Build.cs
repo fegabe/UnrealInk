@@ -67,13 +67,15 @@ public class Ink : ModuleRules
         // Copy dlls and assemblies to output directory
         // --------------------------------------------
 
-        string PlatformString = (Target.Platform == UnrealTargetPlatform.Win64) ? "Win64" : "Win32";
+        string PlatformString = null;
         if (Target.Platform == UnrealTargetPlatform.Win64 || Target.Platform == UnrealTargetPlatform.Win32)
         {
+            PlatformString = (Target.Platform == UnrealTargetPlatform.Win64) ? "Win64" : "Win32";
             RuntimeDependencies.Add("$(TargetOutputDir)/mono-2.0-sgen.dll", Path.Combine(pluginDirectory, "ThirdParty/Mono/lib", PlatformString, "mono-2.0-sgen.dll"));
         }
         else if (Target.Platform == UnrealTargetPlatform.Mac)
         {
+            PlatformString = "Mac";
             RuntimeDependencies.Add("$(TargetOutputDir)/libmonosgen-2.0.dylib", Path.Combine(pluginDirectory, "ThirdParty/Mono/lib", PlatformString, "libmonosgen-2.0.dylib"));
         }
 

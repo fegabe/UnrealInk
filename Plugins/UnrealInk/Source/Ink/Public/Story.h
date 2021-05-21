@@ -12,11 +12,22 @@ class UStoryAsset;
 class UChoice;
 class UStoryState;
 
+#if defined(_WIN32) || defined(__CYGWIN__)
+    #if defined(__GNUC__)
+        #define DLL_EXPORT __attribute__((dllexport))
+    #else
+        #define DLL_EXPORT __declspec(dllexport)
+    #endif
+#elif defined(__GNUC__)
+    #define DLL_EXPORT __attribute__((visibility("default")))
+#endif
+
+
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FVariableObserver, FString, variableName, FInkVar, newValue);
 DECLARE_DELEGATE_RetVal_TwoParams(FInkVar, FExternalFunctionHandler, FString, TArray<FInkVar>);
 
-extern "C" __declspec(dllexport) void ObserverCallback(int InstanceId, const char* VariableName, FInkVarInterop* NewValue);
-extern "C" __declspec(dllexport) FInkVarInterop ExternalFunctionCallback(int32 InstanceId, const char* FunctionName, uint32 NumArgs, FInkVarInterop * pArgs);
+extern "C" DLL_EXPORT void ObserverCallback(int InstanceId, const char* VariableName, FInkVarInterop* NewValue);
+extern "C" DLL_EXPORT FInkVarInterop ExternalFunctionCallback(int32 InstanceId, const char* FunctionName, uint32 NumArgs, FInkVarInterop * pArgs);
 
 UCLASS(BlueprintType)
 class INK_API UStory : public UMonoBaseClass
@@ -132,6 +143,6 @@ private:
 	static int InstanceCounter;
 	int InstanceId{ -1 };
 
-	friend __declspec(dllexport) void ObserverCallback(int InstanceId, const char* VariableName, FInkVarInterop* NewValue);
-	friend __declspec(dllexport) FInkVarInterop ExternalFunctionCallback(int32 InstanceId, const char* FunctionName, uint32 NumArgs, FInkVarInterop * pArgs);
+	friend DLL_EXPORT void ObserverCallback(int InstanceId, const char* VariableName, FInkVarInterop* NewValue);
+	friend DLL_EXPORT FInkVarInterop ExternalFunctionCallback(int32 InstanceId, const char* FunctionName, uint32 NumArgs, FInkVarInterop * pArgs);
 };

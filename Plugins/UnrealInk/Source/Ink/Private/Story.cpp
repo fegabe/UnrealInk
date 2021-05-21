@@ -18,7 +18,7 @@ TMap<TPair<int, FString>, FExternalFunctionHandler> UStory::ExternalFuncMap({});
 
 
 ////////////////////////////////////////////////////////
-extern "C" __declspec(dllexport) void ObserverCallback(int InstanceId, const char* VariableName, FInkVarInterop* NewValue)
+extern "C" DLL_EXPORT void ObserverCallback(int InstanceId, const char* VariableName, FInkVarInterop* NewValue)
 {
 	for (auto& _delegate : UStory::VarObserverMap[UStory::FDelegateMapKey(InstanceId, FString(VariableName))])
 	{
@@ -27,7 +27,7 @@ extern "C" __declspec(dllexport) void ObserverCallback(int InstanceId, const cha
 }
 
 ////////////////////////////////////////////////////////
-extern "C" __declspec(dllexport) FInkVarInterop ExternalFunctionCallback(int32 InstanceId, const char* FunctionName, uint32 NumArgs, FInkVarInterop * pArgs)
+extern "C" DLL_EXPORT FInkVarInterop ExternalFunctionCallback(int32 InstanceId, const char* FunctionName, uint32 NumArgs, FInkVarInterop * pArgs)
 {
 	// Create argument array
 	TArray<FInkVar> Arguments;
